@@ -10,27 +10,24 @@ class Task_Db_Migrate extends Minion_Task
      */
     protected function _execute(array $params)
     {
-        $migrations = new Flexiblemigrations(TRUE);
-        try 
-        {
+        $migrations = new Flexiblemigrations(true);
+        try {
             $model = ORM::factory('Migration');
-        } 
-        catch (Database_Exception $a) 
-        {
+        } catch (Database_Exception $a) {
             Minion_CLI::write('Flexible Migrations is not installed. Please Run the migrations.sql script in your mysql server');
             exit();
         }
 
         $messages = $migrations->migrate();
 
-        if (empty($messages)) { 
+        if (empty($messages)) {
             Minion_CLI::write("Nothing to migrate");
         } else {
             foreach ($messages as $message) {
-                if (key($message) == 0) { 
+                if (key($message) == 0) {
                     Minion_CLI::write($message[0]);
                     Minion_CLI::write("OK");
-                } else { 
+                } else {
                     Minion_CLI::write($message[key($message)]);
                     Minion_CLI::write("ERROR");
                 }
